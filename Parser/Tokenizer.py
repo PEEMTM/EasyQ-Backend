@@ -10,7 +10,7 @@ class Tokenizer:
         return re.match("[a-zA-z]", ch)
 
     def is_operator(self, ch):
-        return ch in ['+', '-', '*', '/', '%', '(', ')', '{', '}', '^', '=']
+        return ch in ['[', ']', '{', '}', '=']
 
     def is_digit(self, ch):
         return ch.isdigit()
@@ -26,7 +26,7 @@ class Tokenizer:
 
             if self.is_digit(ch):
                 s += ch
-                while self.pos < len(self.src) and self.is_digit(self.src[self.pos]):
+                while self.pos < len(self.src) and (self.is_digit(self.src[self.pos]) or self.src[self.pos] == '.'):
                     s += self.src[self.pos]
                     self.pos += 1
                 break
@@ -36,11 +36,11 @@ class Tokenizer:
                 break
             elif self.is_character(ch):
                 s += ch
-                while self.pos < len(self.src) and self.is_character(self.src[self.pos]):
+                while self.pos < len(self.src) and (self.is_character(self.src[self.pos]) or self.src[self.pos] == '?'):
                     s += self.src[self.pos]
                     self.pos += 1
                 break
-            elif self.is_space(ch):
+            elif self.is_space(ch) or ch == ',':
                 self.pos += 1
             else:
                 raise SyntaxError(f"Unknown character: {ch}")
